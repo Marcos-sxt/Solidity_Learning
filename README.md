@@ -15,9 +15,12 @@ A Poll is a simple smart contract written in Solidity that allows users to creat
 
 - **Event Logging**:
   - The contract emits events for poll creation, vote registration, and poll termination, allowing external applications to track poll activity.
+  - The contract emits an event when a poll is fetched.
 
 - **View Polls**:
   - Anyone can retrieve poll details such as the title, status, options, and the vote counts.
+  - Retrieve the list of all created polls including their IDs and titles.
+  - Get the poll creator's address.
 
 ## Prerequisites
 
@@ -29,7 +32,7 @@ A Poll is a simple smart contract written in Solidity that allows users to creat
 ## Installation & Deployment
 
 1. **Clone or Copy the Code**:
-   - Copy the `Poll.sol` contract code into your preferred Solidity IDE (e.g., Remix).
+   - Copy the `vote_contract.sol` contract code into your preferred Solidity IDE (e.g., Remix).
 
 2. **Compile the Contract**:
    - Ensure you are using Solidity version ^0.8.26.
@@ -84,6 +87,8 @@ A Poll is a simple smart contract written in Solidity that allows users to creat
   - Emitted when a vote is cast.
 - **PollEnded**:
   - Emitted when a poll is closed by its creator.
+- **PollFetched**:
+  - Emitted when a poll is fetched.
 
 ### Functions
 
@@ -121,6 +126,20 @@ A Poll is a simple smart contract written in Solidity that allows users to creat
   function getPoll(uint256 _pollId) external view returns (string memory title, bool active, string[] memory optionNames, uint256[] memory optionVotes)
   ```
 
+- **getAllPolls**:
+  - Retrieves the list of all created polls, returning poll IDs and titles.
+  ```solidity
+  function getAllPolls() external view returns (uint256[] memory pollIds, string[] memory titles)
+  ```
+
+- **getPollCreator**:
+  - Retrieves the creator's address for a given poll ID.
+  - Parameter:
+    - `_pollId`: The ID of the poll.
+  ```solidity
+  function getPollCreator(uint256 _pollId) external view returns (address)
+  ```
+
 ## Usage
 
 ### Creating a Poll
@@ -154,3 +173,37 @@ console.log("Active:", pollDetails.active);
 console.log("Options:", pollDetails.optionNames);
 console.log("Votes:", pollDetails.optionVotes);
 ```
+
+### Retrieving All Polls
+
+Call `getAllPolls` to fetch the list of all polls:
+```javascript
+const allPolls = await pollContract.getAllPolls();
+console.log("Poll IDs:", allPolls.pollIds);
+console.log("Titles:", allPolls.titles);
+```
+
+### Retrieving Poll Creator
+
+Call `getPollCreator` to fetch the creator's address for a specific poll:
+```javascript
+const creatorAddress = await pollContract.getPollCreator(1);
+console.log("Creator Address:", creatorAddress);
+```
+
+## Testing
+
+- Use the Remix IDE to deploy and interact with the contract.
+- For automated testing, consider setting up a Hardhat or Truffle project and writing unit tests using frameworks like Mocha and Chai.
+
+## Contributing
+
+Contributions are welcome! Feel free to fork the repository, open issues, or submit pull requests. Any improvements or suggestions are greatly appreciated.
+
+## License
+
+This project is licensed under the GPL-3.0 License.
+
+## Contact
+
+For any questions or feedback, please open an issue or contact the developer directly.
